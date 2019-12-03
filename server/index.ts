@@ -1,30 +1,36 @@
-import { createServer } from 'http'
-import { parse } from 'url'
-import next from 'next'
+import Koa from "koa";
+import http from "http";
+import next from "next";
+import logger from "koa-logger";
+import socketIo from "socket.io";
 
-const port = parseInt(process.env.PORT || '3000', 10)
-const dev = process.env.NODE_ENV !== 'production'
-const app = next({ dev })
-const handle = app.getRequestHandler()
+const port = parseInt(process.env.PORT || "3000", 10);
+const dev = process.env.NODE_ENV !== "production";
+const app = next({ dev });
+const handle = app.getRequestHandler();
+const koa = new Koa();
+const server = http.createServer(koa.callback());
+const io = socketIo(server);
 
-app.prepare().then(() => {
-  createServer((req, res) => {
-    const parsedUrl = parse(req.url!, true)
-    const { pathname, query } = parsedUrl
+io.on("connection", e => {
+  console.log("connect!!");
+});
 
-    if (pathname === '/a') {
-      app.render(req, res, '/a', query)
-    } else if (pathname === '/b') {
-      app.render(req, res, '/b', query)
-    } else {
-      handle(req, res, parsedUrl)
-    }
-  }).listen(port)
+io.on("new", (e: any) => {
+  console.log("new user!");
+});
 
-  // tslint:disable-next-line:no-console
-  console.log(
-    `> Server listening at http://localhost:${port} as ${
-      dev ? 'development' : process.env.NODE_ENV
-    }`
-  )
-})
+const main = async () => {
+  await app.prepare();
+
+  // koa.use(logger());
+  koa.use(ctx => {
+    return handle(ctx.req, ctx.res);
+  });
+
+  server.listen(port, () => {
+    console.log(`Server Running At PORT: ${port}`);
+  });
+};
+
+main();

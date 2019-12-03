@@ -1,5 +1,5 @@
-import React from 'react'
-import Link from 'next/link'
+import React from "react";
+import Link from "next/link";
 
 export default () => (
   <ul>
@@ -14,4 +14,4 @@ export default () => (
       </Link>
     </li>
   </ul>
-)
+);
