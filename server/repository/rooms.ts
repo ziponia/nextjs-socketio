@@ -1,4 +1,6 @@
+import uuid from "uuid/v4";
 export interface IRoom {
+  id: string;
   roomNm: string;
 }
 
@@ -10,7 +12,7 @@ export class RoomsRepository {
   }
 
   public static addRoom(roomNm: string): IRoom[] {
-    this.rooms = this.rooms.concat({ roomNm });
+    this.rooms = this.rooms.concat({ roomNm, id: uuid() });
     return this.rooms;
   }
 }

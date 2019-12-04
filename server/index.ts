@@ -15,6 +15,7 @@ const main = async () => {
   await app.prepare();
 
   // koa.use(logger());
+
   koa.use(ctx => {
     return handle(ctx.req, ctx.res);
   });

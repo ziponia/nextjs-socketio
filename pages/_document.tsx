@@ -12,8 +12,6 @@ class AppDocument extends Document {
     return { ...initialProps };
   };
 
-  componentDidMount() {}
-
   render() {
     return (
       <Html>

@@ -6,6 +6,7 @@ let io: SocketIO.Server;
 
 const socket = (server: http.Server) => {
   io = socketIo(server);
+
   RoomSocketHandler.listen(io);
 };
 
